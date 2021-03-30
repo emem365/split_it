@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:split_it/constants.dart';
 import 'package:split_it/login/loginPage.dart';
 
 class Dashboard extends StatefulWidget {
@@ -97,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: SafeArea(
         child: Container(
-          color: Colors.yellow.shade50,
+          color: kColor1,
           child: Stack(
             children: [
               Center(

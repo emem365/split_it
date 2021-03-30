@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:split_it/constants.dart';
 import 'package:split_it/login/otp.dart';
 
 class LoginPage extends StatefulWidget {
@@ -23,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -32,60 +32,34 @@ class _LoginPageState extends State<LoginPage> {
               child: Opacity(
                 opacity: loading ? 0.5 : 1,
                 child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
                   child: Form(
                     key: formKey,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Image.asset(
+                            'assets/images/login.jpg',
+                            height: 150,
+                          ),
                           Text(
-                            "Login",
+                            "Welcome",
                             style: TextStyle(
                                 letterSpacing: 1.2,
                                 fontSize: 32,
-                                color: Colors.black,
+                                // color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          Text(
+                            "Sign in",
+                            style: TextStyle(
+                                letterSpacing: 1,
+                                fontSize: 20,
+                                color: Colors.grey,
                                 fontWeight: FontWeight.w500),
                           ),
                           SizedBox(height: 40),
-                          Container(
-                              margin: EdgeInsets.symmetric(horizontal: 25),
-                              child: TextFormField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                keyboardType: TextInputType.phone,
-                                controller: phoneNumber,
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.w500),
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 2,
-                                          color: Colors.grey.shade400)),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                    width: 2,
-                                    color: Colors.blue.withOpacity(0.5),
-                                  )),
-                                  labelText: "Phone Number",
-                                  labelStyle: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.grey.shade500,
-                                  ),
-                                  prefixIcon: Icon(
-                                    Icons.phone,
-                                    color: Colors.grey.shade700,
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                ),
-                                validator: (value) {
-                                  if (value.length != 10) {
-                                    return "Invalid phone number";
-                                  }
-                                  return null;
-                                },
-                              )),
+                          PhoneTextField(phoneNumber: phoneNumber),
                           SizedBox(height: 30),
                           Builder(
                             builder: (context) => TextButton(
@@ -106,14 +80,20 @@ class _LoginPageState extends State<LoginPage> {
                                     print("Error!!!!!");
                                 },
                                 style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                child: Text(
-                                  "Send OTP",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
+                                    backgroundColor: kBlue2,
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 18)),
+                                child: Container(
+                                  width: double.infinity,
+                                  child: Center(
+                                    child: Text(
+                                      "GET OTP",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
                                   ),
                                 )),
                           ),
@@ -127,5 +107,56 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+class PhoneTextField extends StatelessWidget {
+  const PhoneTextField({
+    Key key,
+    @required this.phoneNumber,
+  }) : super(key: key);
+
+  final TextEditingController phoneNumber;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: TextFormField(
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      keyboardType: TextInputType.phone,
+      controller: phoneNumber,
+      style:
+          TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 2, color: Colors.grey.shade400)),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+          width: 2,
+          color: kBlue2,
+        )),
+        labelText: "Phone Number",
+        labelStyle: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: kBlue2,
+        ),
+        hintText: "Phone Number",
+        hintStyle: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Colors.grey.shade400,
+        ),
+        prefixIcon: Icon(
+          Icons.phone,
+          color: Colors.grey.shade700,
+        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      validator: (value) {
+        if (value.length != 10) {
+          return "Invalid phone number";
+        }
+        return null;
+      },
+    ));
   }
 }
