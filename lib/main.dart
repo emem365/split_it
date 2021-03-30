@@ -2,8 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:split_it/dashboard/dashboard.dart';
+import 'package:split_it/database/database.dart';
 import 'package:split_it/login/loginPage.dart';
+import 'package:split_it/models/userData.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,10 +22,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Split It',
-        debugShowCheckedModeBanner: false,
-        home: CheckUserStatus());
+    return StreamProvider(
+      create: (context) => DatabaseService().getUserDataStream(),
+      initialData: UserData.empty(),
+      child: MaterialApp(
+          title: 'Split It',
+          debugShowCheckedModeBanner: false,
+          home: CheckUserStatus()),
+    );
   }
 }
 
@@ -41,7 +48,7 @@ class _CheckUserStatusState extends State<CheckUserStatus> {
         builder: (context, snapshot) {
           var page;
           if (snapshot.hasData) {
-            switch (snapshot.data[1]) {
+            switch (snapshot.data) {
               case "login":
                 {
                   page = LoginPage();
@@ -66,10 +73,10 @@ class _CheckUserStatusState extends State<CheckUserStatus> {
         });
   }
 
-  Future<List<String>> checkSignIn() async {
+  Future<String> checkSignIn() async {
     if (FirebaseAuth.instance.currentUser != null)
-      return [FirebaseAuth.instance.currentUser.uid, "home"];
+      return "home";
     else
-      return ['notSignedIn', "login"];
+      return "login";
   }
 }
