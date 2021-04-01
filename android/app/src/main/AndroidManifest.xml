@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.split_it">
+    <uses-permission android:name="android.permission.READ_CONTACTS" />  
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
    <application
-        android:label="split_it"
+        android:label="Split It"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

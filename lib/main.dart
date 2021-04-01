@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:split_it/dashboard/dashboard.dart';
 import 'package:split_it/database/database.dart';
+import 'package:split_it/login/initial.dart';
 import 'package:split_it/login/loginPage.dart';
 import 'package:split_it/models/userData.dart';
 
@@ -59,6 +60,11 @@ class _CheckUserStatusState extends State<CheckUserStatus> {
                   page = Dashboard();
                   break;
                 }
+              case "initial":
+                {
+                  page = InitialDetailPage();
+                  break;
+                }
             }
             return MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -74,9 +80,11 @@ class _CheckUserStatusState extends State<CheckUserStatus> {
   }
 
   Future<String> checkSignIn() async {
-    if (FirebaseAuth.instance.currentUser != null)
-      return "home";
-    else
+    if (FirebaseAuth.instance.currentUser == null)
       return "login";
+    else if (!(await DatabaseService().isUserDocExists()))
+      return "initial";
+    else
+      return "home";
   }
 }

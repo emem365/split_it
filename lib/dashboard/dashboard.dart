@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:split_it/constants.dart';
+import 'package:split_it/database/database.dart';
 import 'package:split_it/login/loginPage.dart';
+import 'package:split_it/view/contacts_page.dart';
+import 'package:split_it/view/home_page.dart';
 
 class Dashboard extends StatefulWidget {
   final String uid;
@@ -26,14 +29,8 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     tabs = [
-      // HomePage(
-      //   uid: uid,
-      // ),
-      // Exploration(),
-      // Admission2(uid: uid),
-      // // NotificationPage(),
-      // NotificationPageUI(),
-      // FAQPage(),
+      HomePage(),
+      ContactsPage(),
     ];
   }
 
@@ -98,10 +95,11 @@ class _DashboardState extends State<Dashboard> {
       ),
       body: SafeArea(
         child: Container(
-          color: kColor1,
+          color: Colors.white,
           child: Stack(
             children: [
-              Center(
+              Align(
+                alignment: Alignment.bottomRight,
                 child: TextButton(
                   onPressed: () {
                     FirebaseAuth.instance.signOut();

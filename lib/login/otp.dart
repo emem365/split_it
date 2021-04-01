@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:split_it/database/database.dart';
 import 'package:split_it/login/OtpVerificationPage.dart';
 import 'package:split_it/dashboard/dashboard.dart';
+import 'package:split_it/login/initial.dart';
 
 class OTPService {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -10,15 +12,25 @@ class OTPService {
     try {
       UserCredential authResult = await auth.signInWithCredential(authCred);
       if (authResult.user != null) {
-        print("uid:::  " +
-            authResult.user.uid +
-            " logged in successfully (inside verification complete callback)");
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Dashboard()));
-
-        return;
+        print("uid :: " + authResult.user.uid + "Logged in successfully");
+        bool isDocExists = await DatabaseService().isUserDocExists();
+        if (isDocExists) {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Dashboard(),
+              ),
+              (route) => false);
+        } else {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InitialDetailPage(),
+              ),
+              (route) => false);
+        }
       } else {
-        print("else part!!!!");
+        print("Else part!!!!");
       }
     } catch (e) {
       print("exception in signinwithcred $e");
@@ -44,20 +56,12 @@ class OTPService {
       timeout: Duration(seconds: 30),
       verificationCompleted: (AuthCredential authCred) async {
         print("Success!!");
-        // Navigator.of(context).pushAndRemoveUntil(
-        //     MaterialPageRoute(builder: (context) => HomePage(), Route route=>false));
-        // await signInWithCred(authCred, context);
       },
       verificationFailed: (FirebaseAuthException exception) {
         stopLoading();
-        // Scaffold.of(context).showSnackBar(SnackBar(
-        //   duration: Duration(seconds: 2),
-        //   content: Text("Oops! Unexpected Error occured. Please Try again."),
-        // ));
         print("exception ${exception.code} \nmessage\n${exception.message}");
       },
       codeSent: (String verificationID, [int i]) {
-        // print("code sent callback replace: true");
         if (stopLoading != null) {
           stopLoading();
         }
