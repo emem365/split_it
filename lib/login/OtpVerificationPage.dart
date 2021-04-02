@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:split_it/constants.dart';
 import 'package:split_it/login/otp.dart';
 
 class OtpVerification extends StatefulWidget {
@@ -93,81 +94,84 @@ class _OtpVerificationState extends State<OtpVerification> {
                 body: Container(
                   height: screenHeight,
                   width: screenWidth,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24.0, vertical: 24),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Verify your OTP",
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 10),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                        child: otpFields(context),
-                      ),
-                      Builder(builder: (context) {
-                        return Center(
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: "Didn't receive the OTP ? \n",
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 24),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Verify your OTP",
+                                style: TextStyle(
+                                    color: kBlue2,
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              children: [
-                                TextSpan(
-                                  text: "Resend",
-                                  style: TextStyle(
-                                    color: timer != 0
-                                        ? Colors.grey.shade600
-                                        : Colors.blue,
-                                    fontWeight: timer != 0
-                                        ? FontWeight.w500
-                                        : FontWeight.w800,
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      if (timer == 0) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        await OTPService().sendOTP(
-                                          widget.phoneNumber,
-                                          context,
-                                          true,
-                                          stopLoading: () {
-                                            setState(() {
-                                              loading = false;
-                                            });
-                                          },
-                                        );
-                                      }
-                                    },
-                                ),
-                                timer != 0
-                                    ? TextSpan(
-                                        text: " in $timer seconds",
-                                        style: TextStyle(
-                                          color: Colors.deepOrange.shade700,
-                                        ),
-                                      )
-                                    : TextSpan(),
-                              ],
-                            ),
+                              SizedBox(width: 10),
+                            ],
                           ),
-                        );
-                      }),
-                    ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: otpFields(context),
+                        ),
+                        Builder(builder: (context) {
+                          return Center(
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: "Didn't receive the OTP ? \n",
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "Resend",
+                                    style: TextStyle(
+                                      color: timer != 0
+                                          ? Colors.grey.shade600
+                                          : kBlue2,
+                                      fontWeight: timer != 0
+                                          ? FontWeight.w500
+                                          : FontWeight.w800,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () async {
+                                        if (timer == 0) {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          await OTPService().sendOTP(
+                                            widget.phoneNumber,
+                                            context,
+                                            true,
+                                            stopLoading: () {
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                            },
+                                          );
+                                        }
+                                      },
+                                  ),
+                                  timer != 0
+                                      ? TextSpan(
+                                          text: " in $timer seconds",
+                                          style: TextStyle(
+                                            color: Colors.deepOrange.shade700,
+                                          ),
+                                        )
+                                      : TextSpan(),
+                                ],
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -208,12 +212,12 @@ class _OtpVerificationState extends State<OtpVerification> {
         keyboardType: TextInputType.number,
         pinTheme: PinTheme(
           shape: PinCodeFieldShape.box,
-          activeColor: Colors.blue,
-          activeFillColor: Colors.transparent,
-          inactiveColor: Colors.blue,
-          inactiveFillColor: Colors.transparent,
-          selectedColor: Colors.blue,
-          selectedFillColor: Colors.transparent,
+          activeColor: Color(0xFFb0cbf8).withOpacity(0.7),
+          activeFillColor: Color(0xFFb0cbf8).withOpacity(0.5),
+          inactiveColor: Color(0xFFb0cbf8).withOpacity(0.7),
+          inactiveFillColor: Colors.grey.withOpacity(0.1),
+          selectedColor: Color(0xFFb0cbf8).withOpacity(0.7),
+          selectedFillColor: Color(0xFFb0cbf8).withOpacity(0.2),
         ),
         onCompleted: (v) async {
           setState(() {
