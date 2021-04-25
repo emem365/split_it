@@ -7,7 +7,10 @@ import 'package:split_it/dashboard/dashboard.dart';
 import 'package:split_it/database/database.dart';
 import 'package:split_it/login/initial.dart';
 import 'package:split_it/login/loginPage.dart';
+import 'package:split_it/models/contactList.dart';
 import 'package:split_it/models/userData.dart';
+
+import 'database/database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +26,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider(
-      create: (context) => DatabaseService().getUserDataStream(),
-      initialData: UserData.empty(),
+    return MultiProvider(
+      providers: [
+        StreamProvider(
+          create: (context) => DatabaseService().getUserDataStream(),
+          initialData: UserData.empty(),
+        ),
+        ChangeNotifierProvider(create: (_) => ContactList())
+      ],
       child: MaterialApp(
           title: 'Split It',
           debugShowCheckedModeBanner: false,
