@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:split_it/constants.dart';
-import 'package:split_it/database/database.dart';
-import 'package:split_it/login/loginPage.dart';
 import 'package:split_it/view/contacts_page.dart';
 import 'package:split_it/view/home_page.dart';
+import 'package:split_it/view/transactions_page.dart';
 
 class Dashboard extends StatefulWidget {
   final String uid;
@@ -31,6 +28,9 @@ class _DashboardState extends State<Dashboard> {
     tabs = [
       HomePage(),
       ContactsPage(),
+      Container(),
+      TransactionList(),
+      Container(),
     ];
   }
 
@@ -38,6 +38,32 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => Container(
+              height: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                // color: Colors.black,
+              ),
+            ),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       drawer: Drawer(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: tabIndex,
@@ -65,6 +91,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             label: '',
           ),
+          BottomNavigationBarItem(icon: Container(), label: ''),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.money,
@@ -98,19 +125,6 @@ class _DashboardState extends State<Dashboard> {
           color: Colors.white,
           child: Stack(
             children: [
-              Align(
-                alignment: Alignment.bottomRight,
-                child: TextButton(
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                        (route) => false);
-                  },
-                  child: Text('Sign Out'),
-                ),
-              ),
               IndexedStack(
                 index: tabIndex,
                 children: tabs,
